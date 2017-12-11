@@ -1,5 +1,8 @@
 /* C program for simulating FAT-16
  *
+ * ZID - Z1835018
+ * Course - CSCI 580
+ *
  * Author - Akhil Pandey (https://akhilpandey95.com, https://github.com/akhilpandey95)
  */
 
@@ -802,23 +805,17 @@ int parse_info_from_file(FILE *fp, Node* head) {
         // insert the file names
         files_in_dir.file_name = (char**)realloc(files_in_dir.file_name, (files_in_dir.file_count+1)*sizeof(*files_in_dir.file_name));
         files_in_dir.file_name[files_in_dir.file_count] = (char*)malloc(sizeof("."));
-        // files_in_dir.file_name[files_in_dir.file_count+1] = (char*)malloc(sizeof(".."));
         strcpy(files_in_dir.file_name[files_in_dir.file_count], ".");
-        // strcpy(files_in_dir.file_name[files_in_dir.file_count+1], "..");
 
         // update the file sizes
         files_in_dir.size = (char**)realloc(files_in_dir.size, (files_in_dir.file_count+1)*sizeof(*files_in_dir.size));
         files_in_dir.size[files_in_dir.file_count] = (char*)malloc(sizeof("512"));
-        // files_in_dir.size[files_in_dir.file_count+1] = (char*)malloc(sizeof("0"));
         strcpy(files_in_dir.size[files_in_dir.file_count], "512");
-        // strcpy(files_in_dir.size[files_in_dir.file_count+1], "0");
 
         // update the file sizes
         files_in_dir.file_blocks = (char**)realloc(files_in_dir.file_blocks, (files_in_dir.file_count+1)*sizeof(*files_in_dir.file_blocks));
         files_in_dir.file_blocks[files_in_dir.file_count] = (char*)malloc(sizeof("0"));
-        // files_in_dir.file_blocks[files_in_dir.file_count+1] = (char*)malloc(sizeof("NONE"));
         strcpy(files_in_dir.file_blocks[files_in_dir.file_count], "0");
-        // strcpy(files_in_dir.file_blocks[files_in_dir.file_count+1], "NONE");
 
         //update the file_count
         files_in_dir.file_count = 1;
@@ -901,15 +898,20 @@ int print_files_in_dir(Entry_Obj *files_in_dir) {
     for (i = 0; i < files_in_dir->file_count; i++) {
         sum += atoi(files_in_dir->size[i]);
         if (i == 0) {
-            fprintf(stdout, "%s\t\t%d\t\t%s\n", files_in_dir->file_name[i], atoi(files_in_dir->size[i]), "0");
+            fprintf(stdout, "%s\t\t%d\t\t%s\n", files_in_dir->file_name[i], atoi(files_in_dir->size[i]), files_in_dir->file_blocks[i]);
             fflush(stdout);
-        // }
-        // else if (i == 1) {
-        //     fprintf(stdout, "%s\t\t%d\t\t%s\n", files_in_dir->file_name[i], atoi(files_in_dir->size[i]), "NONE");
-        //     fflush(stdout);
+        }
+        else if (i == 1) {
+            fprintf(stdout, "%s\t\t%d\t\t%s\n", files_in_dir->file_name[i], atoi(files_in_dir->size[i]), files_in_dir->file_blocks[i]);
+            fflush(stdout);
         } else {
-            fprintf(stdout, "%s\t%d\t\t%s\n", files_in_dir->file_name[i], atoi(files_in_dir->size[i]), files_in_dir->file_blocks[i]);
-            fflush(stdout);
+            if (strlen(files_in_dir->file_name[i]) < 5) {
+                fprintf(stdout, "%s\t\t%d\t\t%s\n", files_in_dir->file_name[i], atoi(files_in_dir->size[i]), files_in_dir->file_blocks[i]);
+                fflush(stdout);
+            } else {
+                fprintf(stdout, "%s\t%d\t\t%s\n", files_in_dir->file_name[i], atoi(files_in_dir->size[i]), files_in_dir->file_blocks[i]);
+                fflush(stdout);
+            }
         }
     }
     fprintf(stdout, "----------------------------------------------\n");
@@ -995,7 +997,7 @@ int init_fat12_simulation() {
     int j = 0;
     int k = 0;
     printf("Beginning the Simulation Run now.\n\n");
-    FILE *fp = fopen("data7.txt", "r");
+    FILE *fp = fopen("data.txt", "r");
     Node *head = NULL;
     Node *temp = NULL;
     for (k =  0; k < 240; k++) {

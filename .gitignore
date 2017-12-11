@@ -1,0 +1,9 @@
+# swp files
+*.swp
+
+# binaries
+./fat12
+
+# test files and test binaries
+test.c
+./test
