@@ -2,7 +2,7 @@
 *.swp
 
 # binaries
-./fat12
+fat12
 
 # test files and test binaries
 test.c
